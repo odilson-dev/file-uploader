@@ -17,5 +17,16 @@ model Session {
   id        String   @id
   sid       String   @unique
   data      String   @db.Text
-  expiresAt   DateTime
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+// model User {
+//   id               Int      @id @default(autoincrement())
+//   username         String   @unique
+//   password         String
+//   confirm_password String
+//   createdAt        DateTime @default(now())
+//   updatedAt        DateTime @updatedAt
+// }
