@@ -1,8 +1,8 @@
 var createError = require("http-errors");
 const session = require("express-session");
-
+const passport = require("passport");
 const { PrismaClient } = require("@prisma/client");
-const PrismaSessionStore = require("@quixo3/prisma-session-store")(session);
+const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 
 const prisma = new PrismaClient();
 var express = require("express");
@@ -40,6 +40,8 @@ app.use(
     },
   })
 );
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
