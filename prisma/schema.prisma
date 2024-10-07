@@ -26,7 +26,7 @@ model User {
   id               Int      @id @default(autoincrement())
   username         String   @unique
   password         String
-  folders     Folder[]
+  folders          Folder[]
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
@@ -40,16 +40,23 @@ model Folder {
   parentId    Int?
   files       File[]     
   createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt    
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+
+  @@unique([name, parentId])
 }
 
 model File {
   id          Int         @id @default(autoincrement())
-  name        String
+  name        String     
   path        String
   size        Int
+  type        String
   folder      Folder?     @relation(fields: [folderId], references: [id])
   folderId    Int?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+
+  @@unique([name, folderId])
 }
