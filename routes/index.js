@@ -1,6 +1,9 @@
 let express = require("express");
 let router = express.Router();
 let userController = require("../controllers/userController");
+const express = require("express");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 const { checkSchema } = require("express-validator");
 
@@ -36,23 +39,7 @@ router.post(
   "/log-in",
   checkSchema(userLoginValidationSchema),
   userController.handleUserLogIn,
-  (req, res, next) => {
-    auth.passport.authenticate("local", (err, user, info) => {
-      if (err) {
-        return next(err); // Handle server errors
-      }
-      if (!user) {
-        // If authentication fails, render the homepage with the error message
-        return res.render("/", { errors: [{ msg: info.message }] });
-      }
-      req.logIn(user, (err) => {
-        if (err) {
-          return next(err);
-        }
-        return res.redirect("/"); // Redirect to the homepage on successful login
-      });
-    })(req, res, next);
-  }
+  userController.handleUserAuthentication
 );
 
 router.get("/log-out", (req, res, next) => {
@@ -62,6 +49,14 @@ router.get("/log-out", (req, res, next) => {
     }
     res.redirect("/");
   });
+});
+
+router.get("/upload", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.render("file-upload-form");
+  } else {
+    res.redirect("/");
+  }
 });
 
 module.exports = router;
