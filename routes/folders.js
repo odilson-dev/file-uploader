@@ -11,5 +11,7 @@ router.post("/new", folderController.createFolder);
 router.get("/:id/edit", folderController.editFolder);
 router.post("/:id/update", folderController.updateFolder);
 
-router.post("/:id/delete", folderController.deleteFolder)
+router.post("/:id/delete", folderController.deleteFolder);
+
+router.get("/:folderId/add-file", folderController.addFile);
 module.exports = router;

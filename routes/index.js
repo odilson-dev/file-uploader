@@ -1,8 +1,6 @@
 let express = require("express");
 let router = express.Router();
 let userController = require("../controllers/userController");
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
 
 const { checkSchema } = require("express-validator");
 
@@ -48,14 +46,6 @@ router.get("/log-out", (req, res, next) => {
     }
     res.redirect("/");
   });
-});
-
-router.get("/upload", (req, res) => {
-  if (req.isAuthenticated()) {
-    res.render("file-upload-form");
-  } else {
-    res.redirect("/");
-  }
 });
 
 module.exports = router;
