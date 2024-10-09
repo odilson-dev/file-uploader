@@ -54,10 +54,20 @@ const deleteFolder = asyncHandler(async (req, res) => {
   res.redirect("/folders");
 });
 
+const addFile = asyncHandler(async (req, res) => {
+  if (req.isAuthenticated()) {
+    const folderId = req.params.folderId;
+    res.render("file-upload-form", { folderId });
+  } else {
+    res.redirect("/");
+  }
+});
+
 module.exports = {
   createFolder,
   getFolders,
   editFolder,
   updateFolder,
   deleteFolder,
+  addFile,
 };
