@@ -7,13 +7,17 @@
   </head>
   <body>
     <h1>Upload a File</h1>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
+    <form
+      action="/files/upload/<%= folderId %>"
+      method="POST"
+      enctype="multipart/form-data"
+    >
       <label for="file">Choose a file (Image, Video, or Audio):</label
       ><br /><br />
       <input
         type="file"
         id="file"
-        name="file"
+        name="uploaded_file"
         accept="image/*,video/*,audio/*"
         required
       /><br /><br />
