@@ -45,9 +45,19 @@ const editFolder = asyncHandler(async (req, res) => {
   });
   res.render("folder/folder-edit-form", { folder });
 });
+
+const deleteFolder = asyncHandler(async (req, res) => {
+  const id = parseInt(req.params.id);
+  const deleteFolder = await prisma.folder.delete({
+    where: { id },
+  });
+  res.redirect("/folders");
+});
+
 module.exports = {
   createFolder,
   getFolders,
   editFolder,
   updateFolder,
+  deleteFolder,
 };
