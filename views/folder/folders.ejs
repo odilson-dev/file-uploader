@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My folders</title>
+  </head>
+  <body>
+    <h1>My folders</h1>
+
+    <% folders.map((folder)=>{ %>
+    <h2><%= folder.name %></h2>
+    <% }) %>
+
+    <a href="/folders/new">Create a folder</a>
+  </body>
+</html>
