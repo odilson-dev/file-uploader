@@ -11,8 +11,38 @@
     <% folders.map((folder)=>{ %>
     <h2><%= folder.name %></h2>
     <a href="/folders/<%= folder.id %>/edit">Edit</a>
+    <button folder_id="<%= folder.id %>">Delete</button>
     <% }) %>
     <hr />
     <a href="/folders/new">Create a folder</a>
+
+    <script>
+      const allDeleteButtons = document.querySelectorAll("button");
+
+      allDeleteButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const folderId = button.getAttribute("folder_id");
+
+          if (confirm("Are you sure you want to delete this folder?")) {
+            // Send a DELETE request to the server
+            fetch(`/folders/${folderId}/delete`, {
+              method: "POST",
+            })
+              .then((response) => {
+                if (response.ok) {
+                  // Remove the item from the DOM if successfully deleted
+                  // button.closest('div').remove();
+                } else {
+                  alert("Failed to delete item. Please try again.");
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred while deleting the item.");
+              });
+          }
+        });
+      });
+    </script>
   </body>
 </html>
