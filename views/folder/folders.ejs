@@ -10,8 +10,9 @@
 
     <% folders.map((folder)=>{ %>
     <h2><%= folder.name %></h2>
+    <a href="/folders/<%= folder.id %>/edit">Edit</a>
     <% }) %>
-
+    <hr />
     <a href="/folders/new">Create a folder</a>
   </body>
 </html>
