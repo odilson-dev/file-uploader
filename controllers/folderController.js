@@ -25,7 +25,7 @@ const getFolders = asyncHandler(async (req, res) => {
       },
     });
 
-    res.render("folder/folders", { folders });
+    res.render("folders/folders", { folders });
   } else {
     res.redirect("/");
   }
@@ -46,7 +46,7 @@ const editFolder = asyncHandler(async (req, res) => {
   const folder = await prisma.folder.findUnique({
     where: { id },
   });
-  res.render("folder/folder-edit-form", { folder });
+  res.render("folders/folder-edit-form", { folder });
 });
 
 const deleteFolder = asyncHandler(async (req, res) => {
@@ -60,7 +60,7 @@ const deleteFolder = asyncHandler(async (req, res) => {
 const addFile = asyncHandler(async (req, res) => {
   if (req.isAuthenticated()) {
     const folderId = req.params.folderId;
-    res.render("file-upload-form", { folderId });
+    res.render("files/files-upload-form", { folderId });
   } else {
     res.redirect("/");
   }
