@@ -43,4 +43,23 @@ const uploadFile = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { uploadFile };
+const editFile = asyncHandler(async (req, res) => {
+  const file = await prisma.file.findUnique({
+    where: { id: parseInt(req.params.fileId) },
+  });
+
+  res.render("files/files-edit-form", { file });
+});
+
+const updateFile = asyncHandler(async (req, res) => {
+  await prisma.file.update({
+    where: {
+      id: parseInt(req.params.fileId),
+    },
+    data: {
+      name: req.body.name,
+    },
+  });
+  res.redirect("/folders");
+});
+module.exports = { uploadFile, editFile, updateFile };
