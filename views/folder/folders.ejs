@@ -10,11 +10,14 @@
 
     <% folders.map((folder)=>{ %>
     <h2><%= folder.name %></h2>
+    <p>Files: <% folder.files.map(file => { %> <%= file.name %>, <% }) %></p>
     <a href="/folders/<%= folder.id %>/edit">Edit</a>
     <a href="/folders/<%= folder.id %>/add-file">Add file</a>
 
     <button folder_id="<%= folder.id %>">Delete</button>
+
     <% }) %>
+
     <hr />
     <a href="/folders/new">Create a folder</a>
 

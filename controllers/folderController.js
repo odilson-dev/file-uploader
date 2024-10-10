@@ -20,6 +20,9 @@ const getFolders = asyncHandler(async (req, res) => {
           equals: req.user.id,
         },
       },
+      include: {
+        files: true,
+      },
     });
 
     res.render("folder/folders", { folders });
