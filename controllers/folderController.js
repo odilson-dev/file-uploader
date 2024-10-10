@@ -51,7 +51,7 @@ const editFolder = asyncHandler(async (req, res) => {
 
 const deleteFolder = asyncHandler(async (req, res) => {
   const id = parseInt(req.params.id);
-  const deleteFolder = await prisma.folder.delete({
+  await prisma.folder.delete({
     where: { id },
   });
   res.redirect("/folders");

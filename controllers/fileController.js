@@ -62,4 +62,13 @@ const updateFile = asyncHandler(async (req, res) => {
   });
   res.redirect("/folders");
 });
-module.exports = { uploadFile, editFile, updateFile };
+
+const deleteFile = asyncHandler(async (req, res) => {
+  const id = parseInt(req.params.id);
+  await prisma.file.delete({
+    where: { id },
+  });
+  res.redirect("/folders");
+});
+
+module.exports = { uploadFile, editFile, updateFile, deleteFile };
