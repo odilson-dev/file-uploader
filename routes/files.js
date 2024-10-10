@@ -14,4 +14,6 @@ router.get("/:fileId/edit", fileController.editFile);
 
 router.post("/:fileId/update", fileController.updateFile);
 
+router.post("/:id/delete", fileController.deleteFile);
+
 module.exports = router;
