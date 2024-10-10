@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title></title>
-  </head>
+  <%- include('./layout/head', { title: currentUser ? "Index" : "Log in" }); -%>
   <body>
     <% if (currentUser) {%>
     <h1>WELCOME BACK <%= currentUser.username %></h1>

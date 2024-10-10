@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>File Upload</title>
-  </head>
+  <%- include('../layout/head', { title: "Upload file" }); -%>
   <body>
     <h1>Upload a File</h1>
     <form
@@ -14,13 +10,7 @@
     >
       <label for="file">Choose a file (Image, Video, or Audio):</label
       ><br /><br />
-      <input
-        type="file"
-        id="file"
-        name="uploaded_file"
-        accept="image/*,video/*,audio/*"
-        required
-      /><br /><br />
+      <input type="file" id="file" name="uploaded_file" required /><br /><br />
 
       <button type="submit">Upload</button>
     </form>

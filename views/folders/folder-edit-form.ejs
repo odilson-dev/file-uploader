@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit Folder</title>
-  </head>
+  <%- include('../layout/head', { title: "Edit Folder" }); -%>
   <body>
     <h1>Edit Folder</h1>
     <form action="/folders/<%= folder.id %>/update" method="POST">

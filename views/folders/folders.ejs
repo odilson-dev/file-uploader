@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My folders</title>
-  </head>
+  <%- include('../layout/head', { title: "My folders" }); -%>
   <body>
     <h1>My folders</h1>
 
@@ -12,29 +8,54 @@
     <h2><%= folder.name %></h2>
     <p>
       Files: <% folder.files.map(file => { %> <%= file.name %>
-      <a href="/files/<%= file.id %>/edit">Rename</a><br />
+      <a href="/files/<%= file.id %>/edit">Rename</a
+      ><button class="file" file_id="<%= file.id %>">Delete</button><br />
       <% }) %>
     </p>
     <a href="/folders/<%= folder.id %>/edit">Edit</a>
     <a href="/folders/<%= folder.id %>/add-file">Add file</a>
 
-    <button folder_id="<%= folder.id %>">Delete</button>
+    <button folder_id="<%= folder.id %>" class="folder">Delete</button>
 
     <% }) %>
 
     <hr />
     <a href="/folders/new">Create a folder</a>
-
     <script>
-      const allDeleteButtons = document.querySelectorAll("button");
+      const allFolderDeleteButtons = document.querySelectorAll(".folder");
 
-      allDeleteButtons.forEach((button) => {
+      allFolderDeleteButtons.forEach((button) => {
         button.addEventListener("click", (e) => {
           const folderId = button.getAttribute("folder_id");
 
           if (confirm("Are you sure you want to delete this folder?")) {
             // Send a DELETE request to the server
             fetch(`/folders/${folderId}/delete`, {
+              method: "POST",
+            })
+              .then((response) => {
+                if (response.ok) {
+                  // Remove the item from the DOM if successfully deleted
+                  // button.closest('div').remove();
+                } else {
+                  alert("Failed to delete item. Please try again.");
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred while deleting the item.");
+              });
+          }
+        });
+      });
+      const allFileDeleteButtons = document.querySelectorAll(".file");
+      allFileDeleteButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const fileId = button.getAttribute("file_id");
+
+          if (confirm("Are you sure you want to delete this file?")) {
+            // Send a DELETE request to the server
+            fetch(`/files/${fileId}/delete`, {
               method: "POST",
             })
               .then((response) => {

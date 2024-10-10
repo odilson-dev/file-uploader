@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rename File</title>
-  </head>
+  <%- include('../layout/head', { title: "Rename file" }); -%>
   <body>
     <h1>Rename File</h1>
     <form action="/files/<%= file.id %>/update" method="POST">
