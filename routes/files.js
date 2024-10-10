@@ -10,4 +10,8 @@ router.post(
   fileController.uploadFile
 );
 
+router.get("/:fileId/edit", fileController.editFile);
+
+router.post("/:fileId/update", fileController.updateFile);
+
 module.exports = router;
