@@ -21,6 +21,7 @@ const getFolders = asyncHandler(async (req, res) => {
         },
       },
       include: {
+        subfolders: true,
         files: true,
       },
     });

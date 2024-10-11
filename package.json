@@ -5,13 +5,15 @@
   "scripts": {
     "start": "node ./bin/www",
     "build:css": "npx tailwindcss -i ./public/stylesheets/tailwind.css -o ./public/stylesheets/main.css --watch",
-    "dev": "nodemon ./bin/www"
+    "server": "nodemon ./bin/www",
+    "dev": "concurrently \"pnpm run build:css\" \"pnpm run server\""
   },
   "dependencies": {
     "@prisma/client": "5.20.0",
     "@quixo3/prisma-session-store": "^3.1.13",
     "autoprefixer": "^10.4.20",
     "bcryptjs": "^2.4.3",
+    "concurrently": "^9.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",

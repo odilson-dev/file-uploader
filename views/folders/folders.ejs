@@ -4,6 +4,43 @@
   <body>
     <h1>My folders</h1>
 
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Files</th>
+          <th>Sub-folders</th>
+          <th>Created</th>
+          <th>Last Updated</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% folders.map((folder)=>{ %>
+        <tr>
+          <td><%= folder.name %></td>
+          <td><%= folder.files.length %></td>
+          <td><%= folder.subfolders.length %></td>
+          <td>
+            <%= new Date(folder.createdAt).toLocaleDateString('en-US', { day:
+            'numeric', month: 'long', year: 'numeric' }) %>
+          </td>
+          <td>
+            <%= new Date(folder.updatedAt).toLocaleDateString('en-US', { day:
+            'numeric', month: 'long', year: 'numeric' }) %>
+          </td>
+          <td>
+            <a href="/folders/<%= folder.id %>/edit">Edit</a>
+            <a href="/folders/<%= folder.id %>/add-file">Add file</a>
+            <a href="/folders/new">Create a folder</a>
+          </td>
+        </tr>
+
+        <% }) %>
+      </tbody>
+      <tbody></tbody>
+    </table>
+
     <% folders.map((folder)=>{ %>
     <h2><%= folder.name %></h2>
     <p>
