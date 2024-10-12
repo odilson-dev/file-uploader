@@ -67,6 +67,20 @@ const addFile = asyncHandler(async (req, res) => {
   }
 });
 
+const showFolder = asyncHandler(async (req, res) => {
+  if (req.isAuthenticated()) {
+    const { id } = req.params;
+
+    const folder = await prisma.folder.findUnique({
+      where: { id: parseInt(id), userId: req.user.id },
+      include: { subfolders: true, files: true },
+    });
+    res.render("folders/show", { folder });
+  } else {
+    res.redirect("/");
+  }
+});
+
 module.exports = {
   createFolder,
   getFolders,
@@ -74,4 +88,5 @@ module.exports = {
   updateFolder,
   deleteFolder,
   addFile,
+  showFolder,
 };
