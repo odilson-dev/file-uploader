@@ -2,7 +2,8 @@
 <html lang="en">
   <%- include('../layout/head', { title: "My folders" }); -%>
   <body class="flex flex-col min-h-screen">
-    <%- include('../layout/header'); -%>
+    <%- include('../layout/header'); -%> <%-
+    include('../dialog-boxes/create-folder'); -%>
     <div class="content flex-1 px-6 py-4 bg-gray-100 flex flex-col">
       <div class="flex items-center"></div>
       <div class="flex justify-between items-center">
@@ -25,31 +26,27 @@
         </div>
 
         <div class="flex text-[12px] sm:text-sm">
-          <form
-            action="/library/5e4ebf06-ad49-4213-9ed6-944d1c58b22e/add-subfolder"
-            method="POST"
+          <button
+            id="createFolderBtn"
+            class="flex items-center px-4 py-2 text-blue-600 hover:underline"
           >
-            <button
-              type="submit"
-              class="flex items-center px-4 py-2 text-blue-600 hover:underline"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 mr-2"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-5 mr-2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
-                />
-              </svg>
-              New Folder
-            </button>
-          </form>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
+              />
+            </svg>
+            New Folder
+          </button>
+
           <button
             data-modal-toggle="upload-modal"
             task="upload"
@@ -121,7 +118,14 @@
                   day: 'numeric', month: 'long', year: 'numeric' }) %>
                 </td>
                 <td class="px-4 py-2">
-                  <a href="/folders/<%= folder.id %>/edit">Rename</a>
+                  <button
+                    class="editFolderBtn"
+                    data-folder-id="<%= folder.id %>"
+                    data-folder-name="<%= folder.name %>"
+                  >
+                    Rename
+                  </button>
+
                   <!-- <a href="/folders/<%= folder.id %>/add-file">Add file</a>
             <a href="/folders/new">Create a folder</a> -->
                 </td>
@@ -134,9 +138,115 @@
       </div>
     </div>
     <hr />
-    <a href="/folders/new">Create a folder</a>
     <%- include('../layout/footer'); -%>
     <script>
+      // Get the modal element
+      const folderModal = document.getElementById("folderModal");
+      // Get the button elements
+      const createFolderBtn = document.getElementById("createFolderBtn");
+      const editFolderBtnList = document.querySelectorAll(".editFolderBtn");
+      // Get the close element
+      const closeBtn = document.getElementsByClassName("close")[0];
+      // Get the modal title and folder form elements
+      const modalTitle = document.getElementById("modalTitle");
+      const folderForm = document.getElementById("folderForm");
+      const folderNameInput = document.getElementById("folderName");
+      let currentFolderId = null;
+
+      // To hold current folder state
+      let isEditMode = false;
+      let currentFolderName = "";
+
+      // Event listener for opening the "Create Folder" modal
+      createFolderBtn.onclick = function () {
+        isEditMode = false;
+        modalTitle.textContent = "Create Folder";
+        folderNameInput.value = ""; // Clear input
+        folderModal.style.display = "block";
+      };
+
+      // Event listener for opening the "Edit Folder" modal
+      editFolderBtnList.forEach((button) => {
+        button.onclick = function () {
+          isEditMode = true;
+          modalTitle.textContent = "Edit Folder";
+          folderNameInput.value = button.dataset.folderName;
+          currentFolderId = button.dataset.folderId;
+          folderModal.style.display = "block";
+        };
+      });
+
+      // Event listener to close the modal
+      closeBtn.onclick = function () {
+        folderModal.style.display = "none";
+      };
+
+      // Close the modal if user clicks outside of it
+      window.onclick = function (event) {
+        if (event.target === folderModal) {
+          folderModal.style.display = "none";
+        }
+      };
+
+      // Event listener for saving the form
+      folderForm.onsubmit = function (event) {
+        event.preventDefault(); // Prevent form from submitting the normal way
+
+        const folderName = folderNameInput.value.trim();
+
+        if (folderName === "") {
+          alert("Folder name is required.");
+          return;
+        }
+
+        if (isEditMode) {
+          editFolder(currentFolderId, folderName);
+          alert(`Folder updated: ${currentFolderName}`);
+        } else {
+          // Create folder functionality
+          createFolder(folderName);
+        }
+
+        // Close the modal after saving
+        folderModal.style.display = "none";
+      };
+
+      // Function to create a folder (POST request)
+      async function createFolder(folderName) {
+        const response = await fetch("/folders/new", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: folderName }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          alert(`Folder created: ${result.name}`);
+        } else {
+          alert("Error creating folder.");
+        }
+      }
+
+      // Function to edit a folder (PUT request)
+      async function editFolder(folderId, folderName) {
+        const response = await fetch(`/folders/${folderId}/update`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: folderName }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          alert(`Folder updated: ${result.name}`);
+        } else {
+          alert("Error updating folder.");
+        }
+      }
+
       const allFolderDeleteButtons = document.querySelectorAll(".folder");
 
       allFolderDeleteButtons.forEach((button) => {

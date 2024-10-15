@@ -5,12 +5,10 @@ var folderController = require("../controllers/folderController");
 /* GET users listing. */
 router.get("/", folderController.getFolders);
 
-router.get("/:id", folderController.showFolder);
-
-router.get("/new", (req, res) => res.render("folders/folder-create-form"));
 router.post("/new", folderController.createFolder);
 
-router.get("/:id/edit", folderController.editFolder);
+router.get("/:id", folderController.showFolder);
+
 router.post("/:id/update", folderController.updateFolder);
 
 router.post("/:id/delete", folderController.deleteFolder);
