@@ -35,19 +35,11 @@ const getFolders = asyncHandler(async (req, res) => {
 const updateFolder = asyncHandler(async (req, res) => {
   const id = parseInt(req.params.id);
   const name = req.body.name;
-  const updateFolder = await prisma.folder.update({
+  await prisma.folder.update({
     where: { id },
     data: { name },
   });
   res.redirect("/folders");
-});
-
-const editFolder = asyncHandler(async (req, res) => {
-  const id = parseInt(req.params.id);
-  const folder = await prisma.folder.findUnique({
-    where: { id },
-  });
-  res.render("folders/folder-edit-form", { folder });
 });
 
 const deleteFolder = asyncHandler(async (req, res) => {
@@ -84,7 +76,6 @@ const showFolder = asyncHandler(async (req, res) => {
 module.exports = {
   createFolder,
   getFolders,
-  editFolder,
   updateFolder,
   deleteFolder,
   addFile,
