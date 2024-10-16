@@ -26,7 +26,7 @@ const getFolders = asyncHandler(async (req, res) => {
       },
     });
 
-    const files = prisma.file.findMany({
+    const files = await prisma.file.findMany({
       where: {
         AND: { userId: { equals: req.user.id } },
         folderId: { equals: null },
