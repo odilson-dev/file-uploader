@@ -16,7 +16,6 @@ const uploadFile = asyncHandler(async (req, res) => {
 
     // Create the file path to be saved in the database
     const filePath = path.join("/public/data/uploads", filename);
-    console.log(mimetype);
 
     // Save file metadata in the database using Prisma
     const newFile = await prisma.file.create({
@@ -25,6 +24,7 @@ const uploadFile = asyncHandler(async (req, res) => {
         path: filePath, // Path to where the file is stored
         size: size, // File size
         type: mimetype,
+        userId: parseInt(req.user.id),
         folder: folderId ? { connect: { id: parseInt(folderId) } } : undefined, // If folderId is provided, associate the file with a folder
       },
     });

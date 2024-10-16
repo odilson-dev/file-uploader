@@ -3,7 +3,8 @@
   <%- include('../layout/head', { title: "My folders" }); -%>
   <body class="flex flex-col min-h-screen">
     <%- include('../layout/header'); -%> <%-
-    include('../dialog-boxes/create-folder'); -%>
+    include('../dialog-boxes/create-folder'); -%> <%-
+    include('../dialog-boxes/upload-modal'); -%>
     <div class="content flex-1 px-6 py-4 bg-gray-100 flex flex-col">
       <div class="flex items-center"></div>
       <div class="flex justify-between items-center">
@@ -50,7 +51,7 @@
           <button
             data-modal-toggle="upload-modal"
             task="upload"
-            parent-name="My Library"
+            parent-name="My Documents"
             id="open-upload-btn"
             class="flex items-center px-4 py-2 text-blue-600 hover:underline"
           >
@@ -241,6 +242,33 @@
     <hr />
     <%- include('../layout/footer'); -%>
     <script>
+      const fileInput = document.getElementById("uploaded_file");
+      const fileNameContainer = document.getElementById("file-name-container");
+      const fileNameSpan = document.getElementById("file-name");
+
+      fileInput.addEventListener("change", function () {
+        const fileName = this.files[0] ? this.files[0].name : "No file chosen";
+        fileNameSpan.textContent = `Ready to upload '${fileName}'`;
+        fileNameContainer.style.display = fileName ? "block" : "none";
+
+        // Handle file size errors
+        const maxSize = 10.5 * 1024 * 1024; // 10.5MB in bytes
+        const errorContainer = document.getElementById("file-error-container");
+
+        errorContainer.innerHTML = ""; // Clear previous errors
+        errorContainer.classList.add("hidden");
+
+        if (this.files[0] && this.files[0].size > maxSize) {
+          errorContainer.textContent =
+            "File size exceeds the 10.5MB limit. Please choose a smaller file.";
+          errorContainer.classList.remove("hidden");
+
+          // Clear the file input to prevent submission of the large file
+          this.value = "";
+          fileNameSpan.textContent = "No file chosen";
+          fileNameContainer.style.display = "none";
+        }
+      });
       // Get the modal element
       const folderModal = document.getElementById("folderModal");
       // Get the button elements

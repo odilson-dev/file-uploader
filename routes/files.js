@@ -5,6 +5,11 @@ const upload = multer({ dest: "./public/data/uploads/" });
 var fileController = require("../controllers/fileController");
 
 router.post(
+  "/upload",
+  upload.single("uploaded_file"),
+  fileController.uploadFile
+);
+router.post(
   "/upload/:folderId",
   upload.single("uploaded_file"),
   fileController.uploadFile
