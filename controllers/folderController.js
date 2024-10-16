@@ -26,7 +26,14 @@ const getFolders = asyncHandler(async (req, res) => {
       },
     });
 
-    res.render("folders/folders", { folders });
+    const files = prisma.file.findMany({
+      where: {
+        AND: { userId: { equals: req.user.id } },
+        folderId: { equals: null },
+      },
+    });
+
+    res.render("folders/folders", { folders, files });
   } else {
     res.redirect("/");
   }

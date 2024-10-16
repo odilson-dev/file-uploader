@@ -103,7 +103,23 @@
               <% folders.map((folder)=>{ %>
               <tr class="hover:bg-gray-50 cursor-pointer transition-colors">
                 <td class="px-4 py-2 text-blue-600 hover:underline">
-                  <a href="/folders/<%= folder.id %>"> <%= folder.name %></a>
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-4 mr-2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
+                      />
+                    </svg>
+                    <a href="/folders/<%= folder.id %>"> <%= folder.name %></a>
+                  </div>
                 </td>
                 <td class="px-4 py-2"><%= folder.files.length %></td>
                 <td class="hidden sm:table-cell px-4 py-2">
@@ -117,17 +133,102 @@
                   <%= new Date(folder.updatedAt).toLocaleDateString('en-US', {
                   day: 'numeric', month: 'long', year: 'numeric' }) %>
                 </td>
-                <td class="px-4 py-2">
-                  <button
-                    class="editFolderBtn"
-                    data-folder-id="<%= folder.id %>"
-                    data-folder-name="<%= folder.name %>"
-                  >
-                    Rename
-                  </button>
 
-                  <!-- <a href="/folders/<%= folder.id %>/add-file">Add file</a>
-            <a href="/folders/new">Create a folder</a> -->
+                <td class="px-4 py-2 relative">
+                  <div class="relative flex">
+                    <button
+                      type="button"
+                      class="w-full justify-center rounded-md px-3 py-2 hover:text-blue-600"
+                      id="menu-button-30ebb92d-18b1-4746-8ed4-36449294a321"
+                      aria-expanded="true"
+                      aria-haspopup="true"
+                    >
+                      <!-- Ellipsis -->
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-4 sm:size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                        />
+                      </svg>
+                    </button>
+
+                    <div
+                      class="hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="menu-button-30ebb92d-18b1-4746-8ed4-36449294a321"
+                      tabindex="-1"
+                    >
+                      <div class="py-1" role="none">
+                        <button
+                          data-folder-id="<%= folder.id %>"
+                          data-folder-name="<%= folder.name %>"
+                          data-modal-toggle="edit-modal"
+                          task="edit"
+                          edit-type="folder"
+                          edit-target-id="30ebb92d-18b1-4746-8ed4-36449294a321"
+                          current-name="New Folder"
+                          class="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 editFolderBtn"
+                          role="menuitem"
+                          tabindex="-1"
+                          id="menu-item-30ebb92d-18b1-4746-8ed4-36449294a321-edit"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="size-5 mr-2"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                            />
+                          </svg>
+                          Edit
+                        </button>
+                        <form
+                          method="POST"
+                          action="/folders/<%= folder.id %>/delete"
+                          role="none"
+                        >
+                          <button
+                            type="submit"
+                            class="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            role="menuitem"
+                            tabindex="-1"
+                            id="menu-item-30ebb92d-18b1-4746-8ed4-36449294a321-delete"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              class="size-5 mr-2"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 9.75 14.25 12m0 0 2.25 2.25M14.25 12l2.25-2.25M14.25 12 12 14.25m-2.58 4.92-6.374-6.375a1.125 1.125 0 0 1 0-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33Z"
+                              />
+                            </svg>
+                            Delete
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
                 </td>
               </tr>
 
@@ -246,7 +347,117 @@
           alert("Error updating folder.");
         }
       }
+      document.addEventListener("DOMContentLoaded", () => {
+        // Dropdown toggle logic
+        document.querySelectorAll('[id^="menu-button"]').forEach((button) => {
+          button.addEventListener("click", function (event) {
+            // Prevent this click event from closing the dropdown itself
+            event.stopPropagation();
 
+            // Close all other open dropdowns
+            document.querySelectorAll('[id^="menu-button"]').forEach((btn) => {
+              const menu = btn.nextElementSibling;
+              if (
+                menu &&
+                !menu.classList.contains("hidden") &&
+                menu !== button.nextElementSibling
+              ) {
+                menu.classList.add("hidden");
+              }
+            });
+
+            // Toggle the clicked dropdown
+            const menu = button.nextElementSibling;
+            if (menu) {
+              menu.classList.toggle("hidden");
+            }
+          });
+        });
+
+        // Stop the dropdown menuitems click event from propagating to parent elements
+        document.querySelectorAll('[role="menuitem"]').forEach((item) => {
+          item.addEventListener("click", function (event) {
+            event.stopPropagation();
+            // Close the parent dropdown
+            const menu = item.closest('[role="menu"]');
+            if (menu) {
+              menu.classList.add("hidden");
+            }
+          });
+        });
+
+        // Close dropdowns on clicking outside
+        document.addEventListener("click", function (event) {
+          document.querySelectorAll('[id^="menu-button"]').forEach((button) => {
+            const menu = button.nextElementSibling;
+            if (
+              menu &&
+              !menu.classList.contains("hidden") &&
+              !button.contains(event.target)
+            ) {
+              menu.classList.add("hidden");
+            }
+          });
+        });
+
+        // Handle modal toggles
+        const toggleButtons = document.querySelectorAll("[data-modal-toggle]");
+        toggleButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const modalId = button.getAttribute("data-modal-toggle");
+            const modalTask = button.getAttribute("task");
+            const modal = document.getElementById(modalId);
+
+            if (modalTask === "edit") {
+              const editType = button.getAttribute("edit-type");
+              const editId = button.getAttribute("edit-target-id");
+              const currentName = button.getAttribute("current-name");
+
+              const form = modal.querySelector("form");
+              const name = modal.querySelector('input[type="text"]');
+              form.action = `/library/${editType}/${editId}/rename`;
+              name.value = currentName;
+            }
+            if (modalTask === "upload") {
+              const parent = button.getAttribute("parent-name");
+              const parentElement = modal.querySelector("#upload-parent");
+              parentElement.textContent = parent;
+            }
+
+            modal.showModal();
+          });
+        });
+
+        // Handle modal close
+        document.querySelectorAll("[data-modal-close]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const modalId = button.getAttribute("data-modal-close");
+            const modal = document.getElementById(modalId);
+            modal.close();
+          });
+        });
+
+        // Initialize upload modal to defaults at each open close
+        const fileInput = document.getElementById("uploaded_file");
+        const fileNameContainer = document.getElementById(
+          "file-name-container"
+        );
+        const fileNameSpan = document.getElementById("file-name");
+        const errorContainer = document.getElementById("file-error-container");
+        const modalOpenButton = document.getElementById("open-upload-btn"); // The button that opens the modal
+
+        // Reset the error container and file input when the modal is opened
+        modalOpenButton.addEventListener("click", function () {
+          // Clear the error container
+          errorContainer.innerHTML = "";
+          errorContainer.classList.add("hidden");
+
+          // Reset the file input and file name display
+          fileInput.value = "";
+          fileNameSpan.textContent = "No file chosen";
+          fileNameContainer.style.display = "none";
+        });
+      });
       const allFolderDeleteButtons = document.querySelectorAll(".folder");
 
       allFolderDeleteButtons.forEach((button) => {
