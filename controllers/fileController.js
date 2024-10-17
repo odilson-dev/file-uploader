@@ -30,10 +30,7 @@ const uploadFile = asyncHandler(async (req, res) => {
     });
 
     // Send a success response back to the client
-    res.status(201).json({
-      message: "File uploaded successfully",
-      file: newFile,
-    });
+    res.redirect("/folders");
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).json({
