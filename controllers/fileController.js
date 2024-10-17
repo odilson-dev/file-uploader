@@ -18,7 +18,7 @@ const uploadFile = asyncHandler(async (req, res) => {
     const filePath = path.join("/public/data/uploads", filename);
 
     // Save file metadata in the database using Prisma
-    const newFile = await prisma.file.create({
+    await prisma.file.create({
       data: {
         name: originalname, // Original file name
         path: filePath, // Path to where the file is stored

@@ -33,34 +33,53 @@ model User {
 }
 
 model Folder {
-  id         Int       @id @default(autoincrement())
+  id         Int          @id @default(autoincrement())
   name       String
-  user       User      @relation(fields: [userId], references: [id])
+  user       User         @relation(fields: [userId], references: [id])
   userId     Int
-  subfolders Folder[]  @relation("Subfolders")
-  parent     Folder?   @relation("Subfolders", fields: [parentId], references: [id])
+  subfolders Folder[]     @relation("Subfolders")
+  parent     Folder?      @relation("Subfolders", fields: [parentId], references: [id])
   parentId   Int?
   files      File[]
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
   deletedAt  DateTime?
+  SharedItem SharedItem[]
 
   @@unique([name, parentId])
 }
 
 model File {
-  id        Int       @id @default(autoincrement())
-  name      String
-  path      String
-  size      Int
-  type      String
-  folder    Folder?   @relation(fields: [folderId], references: [id])
-  folderId  Int?
-  user      User?      @relation(fields: [userId], references: [id])
-  userId    Int?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  id         Int          @id @default(autoincrement())
+  name       String
+  path       String
+  size       Int
+  type       String
+  folder     Folder?      @relation(fields: [folderId], references: [id])
+  folderId   Int?
+  user       User?        @relation(fields: [userId], references: [id])
+  userId     Int?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  deletedAt  DateTime?
+  SharedItem SharedItem[]
 
   @@unique([name, folderId])
+}
+
+model SharedItem {
+  id         Int       @id @default(autoincrement())
+  shareToken String    @unique
+  type       ShareType // Enum to distinguish between files and folders
+  file       File?     @relation(fields: [fileId], references: [id])
+  fileId     Int?
+  folder     Folder?   @relation(fields: [folderId], references: [id])
+  folderId   Int?
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+}
+
+enum ShareType {
+  FILE
+  FOLDER
 }
