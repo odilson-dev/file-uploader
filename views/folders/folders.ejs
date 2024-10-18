@@ -5,7 +5,8 @@
     <%- include('../layout/header'); -%> <%-
     include('../dialog-boxes/create-folder'); -%> <%-
     include('../dialog-boxes/upload-modal'); -%> <%-
-    include('../dialog-boxes/edit-modal'); -%>
+    include('../dialog-boxes/edit-modal'); -%> <%-
+    include('../dialog-boxes/share-modal'); -%>
     <div class="content flex-1 px-6 py-4 bg-gray-100 flex flex-col">
       <div class="flex items-center"></div>
       <div class="flex justify-between items-center">
@@ -319,6 +320,20 @@
               const parent = button.getAttribute("parent-name");
               const parentElement = modal.querySelector("#upload-parent");
               parentElement.textContent = parent;
+            }
+
+            if (modalTask === "share") {
+              const shareType = button.getAttribute("share-type");
+              const shareId = button.getAttribute("share-target-id");
+              const currentName = button.getAttribute("current-name");
+
+              const type = modal.querySelector('input[name="type"]');
+              const itemId = modal.querySelector('input[name="itemId"]');
+              const h3 = modal.querySelector("h3");
+
+              h3.textContent = `Share ${currentName}`;
+              type.value = shareType;
+              itemId.value = shareId;
             }
 
             modal.showModal();
