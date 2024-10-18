@@ -14,7 +14,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var foldersRouter = require("./routes/folders");
 var filesRouter = require("./routes/files");
-
+var shareRouter = require("./routes/share");
 var app = express();
 
 // view engine setup
@@ -49,6 +49,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/folders", foldersRouter);
 app.use("/files", filesRouter);
+app.use("/share", shareRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
