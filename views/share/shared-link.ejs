@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../layout/head', { title: "Share Link" }); -%>
+  <body>
+    <%- include('../layout/header'); -%>
+    <div class="bg-gray-100 min-h-[77vh] flex items-center justify-center">
+      <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Your Share Link</h1>
+
+        <!-- Link Section -->
+        <div class="mb-6">
+          <label for="shareLink" class="block text-gray-600 font-medium mb-2"
+            >Share this link:</label
+          >
+          <div class="relative">
+            <input
+              id="shareLink"
+              type="text"
+              value="<%= shareLink %>"
+              class="w-full bg-gray-200 border border-gray-300 rounded-lg p-2 pr-12 text-gray-700"
+              readonly
+            />
+            <button
+              onclick="copyToClipboard()"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none"
+            >
+              Copy
+            </button>
+          </div>
+        </div>
+
+        <!-- Expiration Date -->
+        <div class="mb-6">
+          <p class="text-gray-600">This link will expire on:</p>
+          <p class="text-xl text-red-600 font-semibold" id="expirationDate">
+            <%= expirationDate %>
+          </p>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="hidden text-green-600 font-medium">
+          Link copied to clipboard!
+        </div>
+      </div>
+    </div>
+
+    <%- include('../layout/footer'); -%>
+    <script>
+      // Function to copy the share link to clipboard
+      function copyToClipboard() {
+        const linkInput = document.getElementById("shareLink");
+        linkInput.select();
+        linkInput.setSelectionRange(0, 99999); // For mobile devices
+
+        document.execCommand("copy");
+
+        // Show success message
+        const successMessage = document.getElementById("successMessage");
+        successMessage.classList.remove("hidden");
+
+        // Hide success message after 2 seconds
+        setTimeout(() => {
+          successMessage.classList.add("hidden");
+        }, 2000);
+      }
+    </script>
+  </body>
+</html>
