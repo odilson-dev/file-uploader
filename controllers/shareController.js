@@ -43,12 +43,9 @@ const createShareItemLink = async (req, res) => {
       "host"
     )}/share/${shareToken}`;
 
-    res.status(201).json({
-      message: `${
-        type.charAt(0).toUpperCase() + type.slice(1)
-      } shared successfully`,
+    res.render("share/shared-link", {
       shareLink: shareLink,
-      expiresAt: sharedItem.expiresAt,
+      expirationDate: sharedItem.expiresAt,
     });
   } catch (error) {
     console.error("Error sharing item:", error);
@@ -59,6 +56,59 @@ const createShareItemLink = async (req, res) => {
   }
 };
 
+const accessSharedItem = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    // Find the shared item by token
+    const sharedItem = await prisma.sharedItem.findUnique({
+      where: { shareToken: token },
+      include: {
+        file: true,
+        folder: true,
+      },
+    });
+
+    if (!sharedItem) {
+      return res.status(404).send("Shared item not found.");
+    }
+
+    // Check if the link has expired
+    const now = new Date();
+    if (now > sharedItem.expiresAt) {
+      return res.status(410).send("Share link has expired.");
+    }
+
+    // Respond with the appropriate data based on the type
+    if (sharedItem.type === "FILE") {
+      res.status(200).json({
+        message: "File accessed successfully",
+        file: sharedItem.file,
+      });
+    } else if (sharedItem.type === "FOLDER") {
+      const folderContents = await prisma.folder.findUnique({
+        where: { id: sharedItem.folderId },
+        include: {
+          files: true,
+          subfolders: true,
+        },
+      });
+
+      res.status(200).json({
+        message: "Folder accessed successfully",
+        folder: folderContents,
+      });
+    }
+  } catch (error) {
+    console.error("Error accessing shared item:", error);
+    res.status(500).json({
+      message: "Error accessing shared item",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createShareItemLink,
+  accessSharedItem,
 };
