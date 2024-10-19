@@ -5,6 +5,6 @@ let shareController = require("../controllers/shareController");
 router.post("/", shareController.createShareItemLink);
 
 // Access shared file or folder route
-//router.get("/share/:token", fileController.accessSharedItem);
+router.get("/:token", shareController.accessSharedItem);
 
 module.exports = router;
