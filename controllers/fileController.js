@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const path = require("path");
+const supabase = require("../supabase/supabase");
 // Create a new user
 const uploadFile = asyncHandler(async (req, res) => {
   try {
@@ -14,20 +15,35 @@ const uploadFile = asyncHandler(async (req, res) => {
     const { originalname, filename, size, mimetype } = req.file;
     const folderId = req.params.folderId || null; // Optional folder ID
 
+    // Upload to Supabase Storage
+    const { data, error } = await supabase.storage
+      .from("images") // My bucket name
+      .upload(`public/${originalname}`, req.file.buffer, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (error) throw error;
+    console.log(data);
+
     // Create the file path to be saved in the database
-    const filePath = path.join("/public/data/uploads", filename);
+    //const filePath = path.join("/public/data/uploads", filename);
+    const { publicURL } = supabase.storage
+      .from("images")
+      .getPublicUrl(`public/${file.originalname}`);
+    console.log(publicURL);
 
     // Save file metadata in the database using Prisma
-    await prisma.file.create({
-      data: {
-        name: originalname, // Original file name
-        path: filePath, // Path to where the file is stored
-        size: size, // File size
-        type: mimetype,
-        userId: parseInt(req.user.id),
-        folder: folderId ? { connect: { id: parseInt(folderId) } } : undefined, // If folderId is provided, associate the file with a folder
-      },
-    });
+    // await prisma.file.create({
+    //   data: {
+    //     name: originalname, // Original file name
+    //     path: filePath, // Path to where the file is stored
+    //     size: size, // File size
+    //     type: mimetype,
+    //     userId: parseInt(req.user.id),
+    //     folder: folderId ? { connect: { id: parseInt(folderId) } } : undefined, // If folderId is provided, associate the file with a folder
+    //   },
+    // });
 
     // Send a success response back to the client
     res.redirect("/folders");
