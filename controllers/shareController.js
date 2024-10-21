@@ -94,10 +94,7 @@ const accessSharedItem = async (req, res) => {
         },
       });
 
-      res.status(200).json({
-        message: "Folder accessed successfully",
-        folder: folderContents,
-      });
+      res.render("share/shared-folder", { folder: folderContents });
     }
   } catch (error) {
     console.error("Error accessing shared item:", error);
