@@ -4,7 +4,21 @@
 
   <body class="flex flex-col min-h-screen">
     <%- include('./layout/header'); -%>
-    <div class="content flex-1 px-6 py-4 bg-gray-100 flex flex-col"></div>
+    <div class="content flex-1 px-6 py-4 bg-gray-100 flex flex-col">
+      <h1>please log in</h1>
+      <form action="/log-in" method="POST">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          name="username"
+          placeholder="username"
+          type="text"
+        />
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" />
+        <button>Log In</button>
+      </form>
+    </div>
     <%- include('./layout/footer'); -%>
   </body>
 </html>

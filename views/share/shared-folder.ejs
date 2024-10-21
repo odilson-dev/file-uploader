@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../layout/head', { title: "Shared Folder" }); -%>
+  <body class="flex flex-col min-h-screen">
+    <%- include('../layout/header'); -%> <% if(folder){ %>
+
+    <div class="content flex-1 px-6 py-4 bg-gray-100 flex flex-col">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-3 ml-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-5 sm:size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
+            />
+          </svg>
+          <h1 class="text-sm sm:text-xl font-bold"><%= folder.name %></h1>
+        </div>
+
+       
+      </div>
+
+      <div class="overflow-x-auto pb-16">
+        <div class="rounded-lg border border-gray-300 my-3 bg-white shadow-md">
+          <table class="w-full">
+            <thead class="bg-gray-200 text-black text-sm">
+              <tr class="text-left border-b">
+                <th class="px-4 py-2 font-normal" style="width: 30%">Name</th>
+                <th class="px-4 py-2 font-normal" style="width: 10%">Files</th>
+                <th class="px-4 py-2 font-normal" style="width: 10%">
+                  Sub-folders
+                </th>
+                <th
+                  class="hidden sm:table-cell px-4 py-2 font-normal"
+                  style="width: 10%"
+                >
+                  Created
+                </th>
+                <th
+                  class="hidden sm:table-cell px-4 py-2 font-normal"
+                  style="width: 10%"
+                >
+                  Last Updated
+                </th>
+                <th class="px-4 py-2 font-normal" style="width: 6%">Options</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 text-[12px] sm:text-sm">
+              <% if(folder.subfolders.length + folder.files.length >= 1){%>
+
+                <% folder.subfolders.map((folder)=>{ %>
+                  <tr class="hover:bg-gray-50 cursor-pointer transition-colors">
+                    <td class="px-4 py-2 text-blue-600 hover:underline">
+                      <%= folder.name %>
+                    </td>
+                    <td class="px-4 py-2"><%= folder.files.length %></td>
+                    <td class="hidden sm:table-cell px-4 py-2">
+                      <%= folder.subfolders.length %>
+                    </td>
+                    <td class="hidden sm:table-cell px-4 py-2">
+                      <%= new Date(folder.createdAt).toLocaleDateString('en-US', {
+                      day: 'numeric', month: 'long', year: 'numeric' }) %>
+                    </td>
+                    <td>
+                      <%= new Date(folder.updatedAt).toLocaleDateString('en-US', {
+                      day: 'numeric', month: 'long', year: 'numeric' }) %>
+                    </td>
+                    <td class="px-4 py-2">
+                      <a href="/folders/<%= folder.id %>/edit">Rename</a>
+                      <!-- <a href="/folders/<%= folder.id %>/add-file">Add file</a>
+                        <a href="/folders/new">Create a folder</a> -->
+                    </td>
+                  </tr>
+    
+
+
+              <% }) %>
+              
+              <% } else {%> 
+                <tr class="bg-gray-50">
+                  <td colspan="6" class="text-center py-4 text-gray-500 text-sm">
+                      This folder is empty.
+                  </td>
+              </tr>
+
+              <%} %>
+
+             
+        
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <% } else { %>
+    <div class="content flex-1 px-6 py-4 bg-gray-100 flex flex-col">
+      <h1 class="text-center">Folder not found</h1>
+      <div class="flex items-center">
+        <a
+          href="/folders"
+          class="py-3 px-1 text-blue-600 hover:text-blue-800 font-medium flex items-center space-x-2"
+        >
+          
+        </a>
+      </div>
+    </div>
+    <% } %> <%- include('../layout/footer'); -%>
+  </body>
+</html>
+
