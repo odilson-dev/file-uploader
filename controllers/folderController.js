@@ -12,6 +12,32 @@ const createFolder = asyncHandler(async (req, res) => {
   res.redirect("/folders");
 });
 
+const createSubFolder = asyncHandler(async (req, res) => {
+  try {
+    console.log("Received request to create subfolder:", req.body);
+    const { name } = req.body;
+
+    let { parentId } = req.params;
+    parentId = parseInt(parentId);
+
+    const userId = req.user.id;
+
+    await prisma.folder.create({
+      data: {
+        name,
+        userId,
+        parentId,
+      },
+    });
+  } catch (error) {
+    console.error("Error creating subfolder:", error);
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", message: error.message });
+  }
+
+  res.redirect(`/folders/${parentId}`);
+});
 const getFolders = asyncHandler(async (req, res) => {
   if (req.isAuthenticated()) {
     const folders = await prisma.folder.findMany({
@@ -72,8 +98,14 @@ const showFolder = asyncHandler(async (req, res) => {
 
     const folder = await prisma.folder.findUnique({
       where: { id: parseInt(id), userId: req.user.id },
-      include: { subfolders: true, files: true },
+      include: {
+        subfolders: {
+          include: { subfolders: true, files: true }, // Include sub-subfolders and files recursively
+        },
+        files: true,
+      },
     });
+    console.log(folder);
     res.render("folders/show", { folder });
   } else {
     res.redirect("/");
@@ -82,6 +114,7 @@ const showFolder = asyncHandler(async (req, res) => {
 
 module.exports = {
   createFolder,
+  createSubFolder,
   getFolders,
   updateFolder,
   deleteFolder,
