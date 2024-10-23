@@ -89,8 +89,10 @@ const accessSharedItem = async (req, res) => {
       const folderContents = await prisma.folder.findUnique({
         where: { id: sharedItem.folderId },
         include: {
+          subfolders: {
+            include: { subfolders: true, files: true }, // Include sub-subfolders and files recursively
+          },
           files: true,
-          subfolders: true,
         },
       });
 

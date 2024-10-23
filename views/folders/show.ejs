@@ -1,12 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('../layout/head', { title: "Show Folder" }); -%>
+
+  <%- include('../layout/head', { title:  folder.name }); -%>
   <body class="flex flex-col min-h-screen">
     <%-
     include('../dialog-boxes/create-folder'); -%>
+    <%-
+    include('../dialog-boxes/upload-modal'); -%> <%-
+    include('../dialog-boxes/edit-modal'); -%> <%-
+    include('../dialog-boxes/share-modal'); -%>
     <%- include('../layout/header'); -%> <% if(folder){ %>
 
     <div class="content flex-1 px-6 py-4 bg-gray-100 flex flex-col">
+       <div class="flex items-center">
+            <% if (folder.parentId) { %>
+                <a href="/folders/<%= folder.parent.id %>" 
+                   class="py-3 px-1 text-blue-600 hover:text-blue-800 font-medium flex items-center space-x-2">
+                    <span class="text-base">← <%= folder.parent.name %></span>
+                </a>
+            <% } else{ %>
+
+              <a href="/folders" 
+                class="py-3 px-1 text-blue-600 hover:text-blue-800 font-medium flex items-center space-x-2">
+                 <span class="text-base">← My documents</span>
+             </a>
+
+
+           <% } %>
+        </div>
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-3 ml-1">
           <svg
@@ -108,7 +129,7 @@
                 <% folder.subfolders.map((folder)=>{ %>
                   <tr class="hover:bg-gray-50 cursor-pointer transition-colors">
                     <td class="px-4 py-2 text-blue-600 hover:underline">
-                      <%= folder.name %>
+                      <a href="/folders/<%= folder.id %>"> <%= folder.name %></a>
                     </td>
                     <td class="px-4 py-2"><%= folder.files.length %></td>
                     <td class="hidden sm:table-cell px-4 py-2">
@@ -122,10 +143,127 @@
                       <%= new Date(folder.updatedAt).toLocaleDateString('en-US', {
                       day: 'numeric', month: 'long', year: 'numeric' }) %>
                     </td>
-                    <td class="px-4 py-2">
-                      <a href="/folders/<%= folder.id %>/edit">Rename</a>
-                      <!-- <a href="/folders/<%= folder.id %>/add-file">Add file</a>
-                        <a href="/folders/new">Create a folder</a> -->
+                    <td class="px-4 py-2 relative">
+                      <div class="relative flex">
+                        <button
+                          type="button"
+                          class="w-full justify-center rounded-md px-3 py-2 hover:text-blue-600"
+                          id="menu-button-<%= folder.id %>"
+                          aria-expanded="true"
+                          aria-haspopup="true"
+                        >
+                          <!-- Ellipsis -->
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="size-4 sm:size-6"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                            />
+                          </svg>
+                        </button>
+                  
+                        <div
+                          class="hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                          role="menu"
+                          aria-orientation="vertical"
+                          aria-labelledby="menu-button-<%= folder.id %>"
+                          tabindex="-1"
+                        >
+                          <div class="py-1" role="none">
+                            <button
+                              data-modal-toggle="edit-modal"
+                              task="edit"
+                              edit-type="folder"
+                              edit-target-id="<%= folder.id %>"
+                              current-name="<%= folder.name %>"
+                              class="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              role="menuitem"
+                              tabindex="-1"
+                              id="menu-item-<%= folder.id %>-edit"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-5 mr-2"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                />
+                              </svg>
+                              Edit
+                            </button>
+                            <button
+                              data-modal-toggle="share-modal"
+                              task="share"
+                              share-type="folder"
+                              share-target-id="<%= folder.id %>"
+                              current-name="<%= folder.name %>"
+                              class="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              role="menuitem"
+                              tabindex="-1"
+                              id="menu-item-<%= folder.id %>-share"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                style="
+                                  fill: rgba(111, 111, 111, 1);
+                                  transform: scaleY(-1);
+                                  msfilter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1);
+                                "
+                              >
+                                <path
+                                  d="M5.5 15a3.51 3.51 0 0 0 2.36-.93l6.26 3.58a3.06 3.06 0 0 0-.12.85 3.53 3.53 0 1 0 1.14-2.57l-6.26-3.58a2.74 2.74 0 0 0 .12-.76l6.15-3.52A3.49 3.49 0 1 0 14 5.5a3.35 3.35 0 0 0 .12.85L8.43 9.6A3.5 3.5 0 1 0 5.5 15zm12 2a1.5 1.5 0 1 1-1.5 1.5 1.5 1.5 0 0 1 1.5-1.5zm0-13A1.5 1.5 0 1 1 16 5.5 1.5 1.5 0 0 1 17.5 4zm-12 6A1.5 1.5 0 1 1 4 11.5 1.5 1.5 0 0 1 5.5 10z"
+                                ></path>
+                              </svg>
+                              Share
+                            </button>
+                            <form
+                              method="POST"
+                              action="/folders/<%= folder.id %>/delete"
+                              role="none"
+                            >
+                              <button
+                                type="submit"
+                                class="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                role="menuitem"
+                                tabindex="-1"
+                                id="menu-item-<%= folder.id %>-delete"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  class="size-5 mr-2"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 9.75 14.25 12m0 0 2.25 2.25M14.25 12l2.25-2.25M14.25 12 12 14.25m-2.58 4.92-6.374-6.375a1.125 1.125 0 0 1 0-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33Z"
+                                  />
+                                </svg>
+                                Delete
+                              </button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
                     </td>
                   </tr>
     
@@ -245,13 +383,6 @@
           },
           body: JSON.stringify({ name: folderName }),
         });
-        console.log(response)
-        if (response.ok) {
-          const result = await response.json();
-          alert(`Folder created: ${result.name}`);
-        } else {
-          alert("Error creating folder.");
-        }
       }
 
       // Function to edit a folder (PUT request)
@@ -270,6 +401,185 @@
         } else {
           alert("Error updating folder.");
         }
-      }</script>
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Dropdown toggle logic
+        document.querySelectorAll('[id^="menu-button"]').forEach((button) => {
+          button.addEventListener("click", function (event) {
+            // Prevent this click event from closing the dropdown itself
+            event.stopPropagation();
+
+            // Close all other open dropdowns
+            document.querySelectorAll('[id^="menu-button"]').forEach((btn) => {
+              const menu = btn.nextElementSibling;
+              if (
+                menu &&
+                !menu.classList.contains("hidden") &&
+                menu !== button.nextElementSibling
+              ) {
+                menu.classList.add("hidden");
+              }
+            });
+
+            // Toggle the clicked dropdown
+            const menu = button.nextElementSibling;
+            if (menu) {
+              menu.classList.toggle("hidden");
+            }
+          });
+        });
+
+        // Stop the dropdown menuitems click event from propagating to parent elements
+        document.querySelectorAll('[role="menuitem"]').forEach((item) => {
+          item.addEventListener("click", function (event) {
+            event.stopPropagation();
+            // Close the parent dropdown
+            const menu = item.closest('[role="menu"]');
+            if (menu) {
+              menu.classList.add("hidden");
+            }
+          });
+        });
+
+        // Close dropdowns on clicking outside
+        document.addEventListener("click", function (event) {
+          document.querySelectorAll('[id^="menu-button"]').forEach((button) => {
+            const menu = button.nextElementSibling;
+            if (
+              menu &&
+              !menu.classList.contains("hidden") &&
+              !button.contains(event.target)
+            ) {
+              menu.classList.add("hidden");
+            }
+          });
+        });
+
+        // Handle modal toggles
+        const toggleButtons = document.querySelectorAll("[data-modal-toggle]");
+        toggleButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const modalId = button.getAttribute("data-modal-toggle");
+            const modalTask = button.getAttribute("task");
+            const modal = document.getElementById(modalId);
+
+            if (modalTask === "edit") {
+              const editType = button.getAttribute("edit-type");
+              const editId = button.getAttribute("edit-target-id");
+              const currentName = button.getAttribute("current-name");
+
+              const form = modal.querySelector("form");
+              const name = modal.querySelector('input[type="text"]');
+              form.action = `/${editType}s/${editId}/update`;
+              name.value = currentName;
+            }
+            if (modalTask === "upload") {
+              const parent = button.getAttribute("parent-name");
+              const parentElement = modal.querySelector("#upload-parent");
+              parentElement.textContent = parent;
+            }
+
+            if (modalTask === "share") {
+              const shareType = button.getAttribute("share-type");
+              const shareId = button.getAttribute("share-target-id");
+              const currentName = button.getAttribute("current-name");
+
+              const type = modal.querySelector('input[name="type"]');
+              const itemId = modal.querySelector('input[name="itemId"]');
+              const h3 = modal.querySelector("h3");
+
+              h3.textContent = `Share ${currentName}`;
+              type.value = shareType;
+              itemId.value = shareId;
+            }
+
+            modal.showModal();
+          });
+        });
+
+        // Handle modal close
+        document.querySelectorAll("[data-modal-close]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const modalId = button.getAttribute("data-modal-close");
+            const modal = document.getElementById(modalId);
+            modal.close();
+          });
+        });
+
+        // Initialize upload modal to defaults at each open close
+        const fileInput = document.getElementById("uploaded_file");
+        const fileNameContainer = document.getElementById(
+          "file-name-container"
+        );
+        const fileNameSpan = document.getElementById("file-name");
+        const errorContainer = document.getElementById("file-error-container");
+        const modalOpenButton = document.getElementById("open-upload-btn"); // The button that opens the modal
+
+        // Reset the error container and file input when the modal is opened
+        modalOpenButton.addEventListener("click", function () {
+          // Clear the error container
+          errorContainer.innerHTML = "";
+          errorContainer.classList.add("hidden");
+
+          // Reset the file input and file name display
+          fileInput.value = "";
+          fileNameSpan.textContent = "No file chosen";
+          fileNameContainer.style.display = "none";
+        });
+      });
+      const allFolderDeleteButtons = document.querySelectorAll(".folder");
+
+      allFolderDeleteButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const folderId = button.getAttribute("folder_id");
+
+          if (confirm("Are you sure you want to delete this folder?")) {
+            // Send a DELETE request to the server
+            fetch(`/folders/${folderId}/delete`, {
+              method: "POST",
+            })
+              .then((response) => {
+                if (response.ok) {
+                  // Remove the item from the DOM if successfully deleted
+                  // button.closest('div').remove();
+                } else {
+                  alert("Failed to delete item. Please try again.");
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred while deleting the item.");
+              });
+          }
+        });
+      });
+      const allFileDeleteButtons = document.querySelectorAll(".file");
+      allFileDeleteButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const fileId = button.getAttribute("file_id");
+
+          if (confirm("Are you sure you want to delete this file?")) {
+            // Send a DELETE request to the server
+            fetch(`/files/${fileId}/delete`, {
+              method: "POST",
+            })
+              .then((response) => {
+                if (response.ok) {
+                  // Remove the item from the DOM if successfully deleted
+                  // button.closest('div').remove();
+                } else {
+                  alert("Failed to delete item. Please try again.");
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred while deleting the item.");
+              });
+          }
+        });
+      });
+      
+      </script>
   </body>
 </html>
