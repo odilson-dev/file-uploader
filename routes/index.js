@@ -59,6 +59,7 @@ router.get("/profile", async (req, res) => {
       },
       include: {
         files: true,
+        folders: true,
       },
     });
     res.render("profile", { user });

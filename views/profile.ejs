@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('./layout/head', { title: currentUser.username }); -%>
+  <%- include('./layout/head', { title: currentUser.username + ' profile' });
+  -%>
 
   <body class="flex flex-col min-h-screen bg-gray-100">
     <%- include('./layout/header'); -%>
@@ -29,8 +30,10 @@
       <!-- Profile Details Section -->
       <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div class="bg-gray-100 p-4 rounded-lg">
-          <h2 class="text-lg font-semibold text-gray-700">Username</h2>
-          <p class="text-gray-600"><%= currentUser.username %></p>
+          <h2 class="text-lg font-semibold text-gray-700">
+            Total Folders Created
+          </h2>
+          <p class="text-gray-600"><%= user.folders.length %></p>
         </div>
 
         <div class="bg-gray-100 p-4 rounded-lg">
