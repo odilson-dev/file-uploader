@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./layout/head', { title: currentUser.username }); -%>
+
+  <body class="flex flex-col min-h-screen bg-gray-100">
+    <%- include('./layout/header'); -%>
+    <div
+      class="content bg-white flex-1 flex flex-col w-10/12 mx-auto p-6 rounded-lg shadow-md mt-10 mb-10"
+    >
+      <!-- Profile Header -->
+      <header class="flex items-center justify-between mb-6">
+        <div class="flex items-center space-x-4">
+          <img
+            src="/images/default-profile.png"
+            alt="Profile Avatar"
+            class="w-20 h-20 rounded-full object-cover"
+          />
+          <div>
+            <h1 class="text-3xl font-bold text-gray-800">@jephte</h1>
+            <p class="text-gray-600">
+              Joined on <%= new
+              Date(currentUser.createdAt).toLocaleDateString('en-US', { day:
+              'numeric', month: 'long', year: 'numeric' }) %>
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Profile Details Section -->
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-gray-100 p-4 rounded-lg">
+          <h2 class="text-lg font-semibold text-gray-700">Username</h2>
+          <p class="text-gray-600"><%= currentUser.username %></p>
+        </div>
+
+        <div class="bg-gray-100 p-4 rounded-lg">
+          <h2 class="text-lg font-semibold text-gray-700">
+            Total Files Uploaded
+          </h2>
+          <p class="text-gray-600"><%= user.files.length %></p>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+    </div>
+    <%- include('./layout/footer'); -%>
+  </body>
+</html>

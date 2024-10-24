@@ -11,7 +11,6 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
 var foldersRouter = require("./routes/folders");
 var filesRouter = require("./routes/files");
 var shareRouter = require("./routes/share");
@@ -46,7 +45,6 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
 app.use("/folders", foldersRouter);
 app.use("/files", filesRouter);
 app.use("/share", shareRouter);

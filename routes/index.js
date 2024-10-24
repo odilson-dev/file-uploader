@@ -1,5 +1,7 @@
 let express = require("express");
 let router = express.Router();
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 let userController = require("../controllers/userController");
 
 const { checkSchema } = require("express-validator");
@@ -15,7 +17,7 @@ router.use((req, res, next) => {
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
+  res.render("index");
 });
 
 router.get("/sign-up", (req, res) => {
@@ -46,6 +48,23 @@ router.get("/log-out", (req, res, next) => {
     }
     res.redirect("/");
   });
+});
+
+// Sample route to render the profile page
+router.get("/profile", async (req, res) => {
+  if (req.isAuthenticated()) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: parseInt(req.user.id),
+      },
+      include: {
+        files: true,
+      },
+    });
+    res.render("profile", { user });
+  } else {
+    res.redirect("/log-in");
+  }
 });
 
 module.exports = router;
