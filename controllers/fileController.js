@@ -47,11 +47,11 @@ const uploadFile = asyncHandler(async (req, res) => {
         folder: folderId ? { connect: { id: parseInt(folderId) } } : undefined, // Associate the file with a folder, if provided
       },
     });
-    console.log(uploadedFile);
-    // Send success response back to the client
-    res
-      .status(200)
-      .json({ message: "File uploaded successfully", path: filePath });
+    if (folderId) {
+      res.redirect(`/folders/${folderId}`);
+    } else {
+      res.redirect(`/folders`);
+    }
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).json({
@@ -59,6 +59,39 @@ const uploadFile = asyncHandler(async (req, res) => {
       error: error.message,
     });
   }
+});
+const downloadFile = asyncHandler(async (req, res) => {
+  const { fileId } = req.params;
+
+  // Fetch file metadata from the database
+  const file = await prisma.file.findUnique({
+    where: { id: parseInt(fileId) },
+  });
+
+  if (!file) {
+    return res.status(404).json({ message: "File not found" });
+  }
+
+  // Download the file from Supabase storage
+  const { data, error } = await supabase.storage
+    .from("images") // Replace 'images' with your actual bucket name
+    .download(`public/${file.name}`); // Path to the file in the bucket
+
+  if (error) {
+    console.error("Error downloading file from storage:", error.message);
+    return res.status(500).json({ message: "Error downloading file" });
+  }
+
+  // Ensure the file is in a correct format (Blob or Readable Stream)
+  const arrayBuffer = await data.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer); // Convert to Node.js buffer
+
+  // Set headers for file download
+  res.setHeader("Content-Disposition", `attachment; filename="${file.name}"`);
+  res.setHeader("Content-Type", file.type); // Set appropriate MIME type (e.g., image/png, application/pdf, etc.)
+
+  // Send the buffer as the file response
+  res.send(buffer);
 });
 
 const editFile = asyncHandler(async (req, res) => {
@@ -70,23 +103,51 @@ const editFile = asyncHandler(async (req, res) => {
 });
 
 const updateFile = asyncHandler(async (req, res) => {
-  await prisma.file.update({
-    where: {
-      id: parseInt(req.params.fileId),
-    },
-    data: {
-      name: req.body.name,
-    },
+  const { fileId } = req.params;
+
+  // Find the file by ID in your database
+  const file = await prisma.file.findUnique({
+    where: { id: parseInt(fileId) },
   });
-  res.redirect("/folders");
+
+  // Update the file name in the database
+  const updatedFile = await prisma.file.update({
+    where: { id: parseInt(fileId) },
+    data: { name: req.body.name },
+  });
+
+  // Rename the file in Supabase Storage
+  const oldFileName = `public/${file.name}`;
+  const newFileName = `public/${updatedFile.name}`;
+
+  // First, upload the file with the new name
+  const { data: uploadData, error: uploadError } = await supabase.storage
+    .from("images") // Replace 'avatars' with your bucket name
+    .move(oldFileName, newFileName); // Move method to "rename" the file
+
+  if (uploadError) {
+    console.error("Error renaming file in Supabase:", uploadError.message);
+    return res.status(500).json({ message: "Error renaming file in Supabase" });
+  }
+
+  // Redirect to the appropriate folder
+  updatedFile.folderId
+    ? res.redirect(`/folders/${updatedFile.folderId}`)
+    : res.redirect(`/folders`);
 });
 
 const deleteFile = asyncHandler(async (req, res) => {
   const id = parseInt(req.params.id);
-  await prisma.file.delete({
+  const file = await prisma.file.delete({
     where: { id },
   });
-  res.redirect("/folders");
+  const { data, error } = await supabase.storage
+    .from("images")
+    .remove([`public/${file.name}`]);
+
+  file.folderId
+    ? res.redirect(`/folders/${file.folderId}`)
+    : res.redirect(`/folders`);
 });
 
-module.exports = { uploadFile, editFile, updateFile, deleteFile };
+module.exports = { uploadFile, downloadFile, editFile, updateFile, deleteFile };

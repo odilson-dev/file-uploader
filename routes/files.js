@@ -11,6 +11,8 @@ router.post(
   fileController.uploadFile
 );
 
+router.get("/:fileId/download", fileController.downloadFile);
+
 router.get("/:fileId/edit", fileController.editFile);
 
 router.post("/:fileId/update", fileController.updateFile);
