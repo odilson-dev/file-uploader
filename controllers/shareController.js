@@ -68,7 +68,6 @@ const accessSharedItem = async (req, res) => {
         folder: true,
       },
     });
-
     if (!sharedItem) {
       return res.status(404).send("Shared item not found.");
     }
@@ -107,7 +106,33 @@ const accessSharedItem = async (req, res) => {
   }
 };
 
+const viewSharedFolder = async (req, res) => {
+  try {
+    const { folderId } = req.params;
+
+    const folder = await prisma.folder.findUnique({
+      where: { id: parseInt(folderId) },
+      include: {
+        subfolders: {
+          include: { subfolders: true, files: true }, // Include sub-subfolders and files recursively
+        },
+        files: true,
+        parent: true,
+      },
+    });
+
+    res.render("share/shared-folder", { folder });
+  } catch (error) {
+    console.error("Error accessing shared item:", error);
+    res.status(500).json({
+      message: "Error accessing shared item",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createShareItemLink,
   accessSharedItem,
+  viewSharedFolder,
 };
