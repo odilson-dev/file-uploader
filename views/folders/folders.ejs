@@ -4,7 +4,7 @@
   <body class="flex flex-col min-h-screen">
     <%- include('../layout/header'); -%> <%-
     include('../dialog-boxes/create-folder'); -%> <%-
-    include('../dialog-boxes/upload-modal'); -%> <%-
+    include('../dialog-boxes/upload-modal', {folderId: null}); -%> <%-
     include('../dialog-boxes/edit-modal'); -%> <%-
     include('../dialog-boxes/share-modal'); -%>
     <div class="content flex-1 px-6 py-4 bg-gray-100 flex flex-col">

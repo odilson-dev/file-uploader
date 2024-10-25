@@ -39,7 +39,7 @@
     </div>
     <!-- Modal body -->
     <form
-      action="/files/upload"
+      action="/files/upload<%= folderId ? '/' + folderId : '' %>"
       method="POST"
       enctype="multipart/form-data"
       class="p-4"

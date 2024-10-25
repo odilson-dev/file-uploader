@@ -33,7 +33,8 @@
         <div class="mb-6">
           <p class="text-gray-600">This link will expire on:</p>
           <p class="text-xl text-red-600 font-semibold" id="expirationDate">
-            <%= expirationDate %>
+            <%= new Date(expirationDate).toLocaleDateString('en-US', { day:
+            'numeric', month: 'long', year: 'numeric' }) %>
           </p>
         </div>
 

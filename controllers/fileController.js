@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const fs = require("fs");
-const path = require("path");
 const supabase = require("../supabase/supabase");
 // Create a new file
 
@@ -44,7 +43,7 @@ const uploadFile = asyncHandler(async (req, res) => {
         size: size, // File size
         type: mimetype,
         userId: parseInt(req.user.id), // User who uploaded the file
-        folder: folderId ? { connect: { id: parseInt(folderId) } } : undefined, // Associate the file with a folder, if provided
+        folderId: folderId ? parseInt(folderId) : null, // Associate the file with a folder, if provided
       },
     });
     if (folderId) {
