@@ -5,6 +5,8 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 var fileController = require("../controllers/fileController");
 
+router.get("/:id", fileController.showFile);
+
 router.post(
   "/upload/:folderId?",
   upload.single("uploaded_file"),

@@ -21,7 +21,10 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/sign-up", (req, res) => {
-  res.render("sign-up-form");
+  res.render("index/sign-up");
+});
+router.get("/log-in", (req, res) => {
+  res.render("index/log-in");
 });
 
 router.post(

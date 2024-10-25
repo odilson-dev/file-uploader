@@ -6,5 +6,6 @@ router.post("/", shareController.createShareItemLink);
 
 // Access shared file or folder route
 router.get("/:token", shareController.accessSharedItem);
+router.get("/folders/:folderId", shareController.viewSharedFolder);
 
 module.exports = router;
