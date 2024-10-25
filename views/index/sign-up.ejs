@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../layout/head', { title: 'Sign Up - FileUpload' }); -%>
+  <body class="bg-gray-100">
+    <%- include('../layout/header'); -%>
+    <div class="flex items-center justify-center h-screen">
+      <div class="w-full max-w-md">
+        <div class="bg-white shadow-md rounded-lg px-8 py-6">
+          <h2 class="text-2xl font-bold text-center text-indigo-700">
+            Sign Up for FileUploader
+          </h2>
+          <form action="/sign-up" method="POST" class="mt-6">
+            <!-- Username Field -->
+            <div class="mb-4">
+              <label for="username" class="block text-gray-700">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                class="w-full px-3 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter a username"
+                required
+              />
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-4">
+              <label for="password" class="block text-gray-700">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="w-full px-3 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter a password"
+                required
+              />
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="mb-4">
+              <label for="confirm-password" class="block text-gray-700"
+                >Confirm Password</label
+              >
+              <input
+                type="password"
+                id="confirm-password"
+                name="confirmPassword"
+                class="w-full px-3 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Confirm your password"
+                required
+              />
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="w-full bg-indigo-700 text-white py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Sign Up
+            </button>
+
+            <!-- Links -->
+            <div class="mt-4 text-center">
+              <a href="/log-in" class="text-indigo-700 hover:underline"
+                >Already have an account? Login</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <%- include('../layout/footer'); -%>
+  </body>
+</html>

@@ -15,13 +15,13 @@
        <div class="flex items-center">
             <% if (folder.parentId) { %>
                 <a href="/folders/<%= folder.parent.id %>" 
-                   class="py-3 px-1 text-blue-600 hover:text-blue-800 font-medium flex items-center space-x-2">
+                   class="py-3 px-1 text-indigo-700 hover:text-indigo-700 font-medium flex items-center space-x-2">
                     <span class="text-base">← <%= folder.parent.name %></span>
                 </a>
             <% } else{ %>
 
               <a href="/folders" 
-                class="py-3 px-1 text-blue-600 hover:text-blue-800 font-medium flex items-center space-x-2">
+                class="py-3 px-1 text-indigo-700 hover:text-indigo-700 font-medium flex items-center space-x-2">
                  <span class="text-base">← My documents</span>
              </a>
 
@@ -44,6 +44,7 @@
               d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
             />
           </svg>
+          
           <h1 class="text-sm sm:text-xl font-bold"><%= folder.name %></h1>
         </div>
 
@@ -51,7 +52,7 @@
           <button
             id="createSubFolderBtn"
             type="button"
-            class="flex items-center px-4 py-2 text-blue-600 hover:underline"
+            class="flex items-center px-4 py-2 text-indigo-700 hover:underline"
             data-parent-id="<%= folder.id %>"
           >
             <svg
@@ -76,7 +77,7 @@
             task="upload"
             parent-name="My Documents"
             id="open-upload-btn"
-            class="flex items-center px-4 py-2 text-blue-600 hover:underline"
+            class="flex items-center px-4 py-2 text-indigo-700 hover:underline"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -128,9 +129,25 @@
 
                 <% folder.subfolders.map((folder)=>{ %>
                   <tr class="hover:bg-gray-50 cursor-pointer transition-colors">
-                    <td class="px-4 py-2 text-blue-600 hover:underline">
-                      <a href="/folders/<%= folder.id %>"> <%= folder.name %></a>
-                    </td>
+                    <td class="px-4 py-2 text-indigo-700 hover:underline">
+    <div class="flex items-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-4 mr-2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
+        />
+      </svg>
+      <a href="/folders/<%= folder.id %>"> <%= folder.name %></a>
+    </div>
+  </td>
                     <td class="px-4 py-2"><%= folder.files.length %></td>
                     <td class="hidden sm:table-cell px-4 py-2">
                       <%= folder.subfolders.length %>
@@ -147,7 +164,7 @@
                       <div class="relative flex">
                         <button
                           type="button"
-                          class="w-full justify-center rounded-md px-3 py-2 hover:text-blue-600"
+                          class="w-full justify-center rounded-md px-3 py-2 hover:text-indigo-700"
                           id="menu-button-<%= folder.id %>"
                           aria-expanded="true"
                           aria-haspopup="true"
@@ -270,7 +287,7 @@
 
               <% folder.files.map((file)=>{ %>
                 <tr class="hover:bg-gray-50 cursor-pointer transition-colors">
-                  <td class="px-4 py-2 text-blue-600 hover:underline">
+                  <td class="px-4 py-2 text-indigo-700 hover:underline">
                     <div class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -304,7 +321,7 @@
                     <div class="relative flex">
                       <button
                         type="button"
-                        class="w-full justify-center rounded-md px-3 py-2 hover:text-blue-600"
+                        class="w-full justify-center rounded-md px-3 py-2 hover:text-indigo-700"
                         id="menu-button-869d262f-8678-4387-9839-b1d7f46885d7"
                         aria-expanded="true"
                         aria-haspopup="true"
@@ -445,7 +462,7 @@
       <div class="flex items-center">
         <a
           href="/folders"
-          class="py-3 px-1 text-blue-600 hover:text-blue-800 font-medium flex items-center space-x-2"
+          class="py-3 px-1 text-indigo-700 hover:text-indigo-700 font-medium flex items-center space-x-2"
         >
           <span class="text-base">← My Documents</span>
         </a>
