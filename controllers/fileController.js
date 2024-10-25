@@ -135,6 +135,20 @@ const updateFile = asyncHandler(async (req, res) => {
     : res.redirect(`/folders`);
 });
 
+const showFile = asyncHandler(async (req, res) => {
+  const file = {
+    id: 1,
+    name: "Project_Report.pdf",
+    size: 1048576, // File size in bytes (1 MB here)
+    type: "application/pdf",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    description: "A detailed report of the project.",
+  };
+
+  res.render("files/show", { file });
+});
+
 const deleteFile = asyncHandler(async (req, res) => {
   const id = parseInt(req.params.id);
   const file = await prisma.file.delete({
@@ -149,4 +163,11 @@ const deleteFile = asyncHandler(async (req, res) => {
     : res.redirect(`/folders`);
 });
 
-module.exports = { uploadFile, downloadFile, editFile, updateFile, deleteFile };
+module.exports = {
+  uploadFile,
+  downloadFile,
+  editFile,
+  updateFile,
+  showFile,
+  deleteFile,
+};
