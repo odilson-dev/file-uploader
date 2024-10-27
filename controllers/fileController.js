@@ -136,16 +136,8 @@ const updateFile = asyncHandler(async (req, res) => {
 });
 
 const showFile = asyncHandler(async (req, res) => {
-  const file = {
-    id: 1,
-    name: "Project_Report.pdf",
-    size: 1048576, // File size in bytes (1 MB here)
-    type: "application/pdf",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    description: "A detailed report of the project.",
-  };
-
+  const { id } = req.params;
+  const file = await prisma.file.findUnique({ where: { id: parseInt(id) } });
   res.render("files/show", { file });
 });
 

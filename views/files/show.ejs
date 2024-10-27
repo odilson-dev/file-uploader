@@ -1,112 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('../layout/head', {title: 'File Details - FileUploader'}); -%>
-  <body class="bg-gray-100 min-h-screen font-sans">
-    <%- include('../layout/header'); -%>
+  <%- include('../layout/head', { title: file.name }); -%>
+  <body class="bg-gray-50 min-h-screen font-sans">
+    <%- include('../layout/header') -%>
+    </header>
+
     <!-- Main Content -->
-    <main class="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
-      <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+    <main class="container mx-auto py-10 px-4">
+      <div class="bg-white shadow rounded-lg overflow-hidden max-w-3xl mx-auto">
+        <!-- File Header Section -->
         <div
-          class="p-6 flex flex-col sm:flex-row sm:justify-between sm:items-center"
+          class="p-8 flex flex-col items-start justify-between md:flex-row md:items-center"
         >
           <div>
-            <h2 class="text-3xl font-bold text-gray-800 mb-1">
+            <h2 class="text-2xl font-semibold text-gray-800">
               <%= file.name %>
             </h2>
-            <p class="text-gray-500 text-sm">
-              Uploaded on <%= new Date(file.createdAt).toLocaleDateString() %>
+            <p class="text-sm text-gray-500 mt-2">
+              Uploaded on  <%= new Date(file.createdAt).toLocaleDateString('en-US', { day:
+                'numeric', month: 'long', year: 'numeric' }) %>
             </p>
           </div>
           <a
             href="/files/<%= file.id %>/download"
-            class="mt-4 sm:mt-0 bg-indigo-700 text-white px-6 py-2 rounded-lg text-lg font-medium hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            class="mt-4 md:mt-0 bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
           >
             Download File
           </a>
         </div>
 
-        <!-- File Information -->
-        <div class="p-6 bg-gray-50 border-t border-gray-200">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- File Details Section -->
+        <div class="px-8 pb-8 pt-6 bg-gray-50 border-t border-gray-200">
+          <div class="space-y-6">
             <!-- File Type -->
-            <div class="flex items-center p-4 bg-white shadow-sm rounded-lg">
-              <div class="p-3 bg-indigo-100 rounded-full">
+            <div class="flex items-center">
+              <div
+                class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center"
+              >
                 <svg
-                  class="h-6 w-6 text-indigo-700"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  style="fill: #4f46e5; transform: ; msfilter: "
                 >
                   <path
-                    d="M9 3a7 7 0 100 14h2a7 7 0 100-14H9zM4 10a6 6 0 1110 4.472V15a2 2 0 11-2-2h-.528A5.978 5.978 0 014 10z"
-                  />
+                    d="M18 22a2 2 0 0 0 2-2V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12zM13 4l5 5h-5V4zM7 8h3v2H7V8zm0 4h10v2H7v-2zm0 4h10v2H7v-2z"
+                  ></path>
                 </svg>
               </div>
               <div class="ml-4">
-                <p class="text-sm font-semibold text-gray-500">File Type</p>
-                <p class="text-lg text-gray-700"><%= file.type %></p>
+                <p class="text-sm text-gray-500">File Type</p>
+                <p class="text-lg text-gray-700 font-medium">
+                  <%= file.type %>
+                </p>
               </div>
             </div>
 
             <!-- File Size -->
-            <div class="flex items-center p-4 bg-white shadow-sm rounded-lg">
-              <div class="p-3 bg-indigo-100 rounded-full">
+            <div class="flex items-center">
+              <div
+                class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center"
+              >
                 <svg
-                  class="h-6 w-6 text-indigo-700"
+                  class="h-6 w-6 text-indigo-600"
                   fill="currentColor"
-                  viewBox="0 0 20 20"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path
-                    d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm1 8h10V8H5v4zm10-6H5V6h10v2z"
-                  />
+                  <path d="M4 4h16v16H4z" />
                 </svg>
               </div>
               <div class="ml-4">
-                <p class="text-sm font-semibold text-gray-500">File Size</p>
-                <p class="text-lg text-gray-700">
+                <p class="text-sm text-gray-500">File Size</p>
+                <p class="text-lg text-gray-700 font-medium">
                   <%= (file.size / 1024).toFixed(2) %> KB
                 </p>
               </div>
             </div>
 
             <!-- Last Modified -->
-            <div class="flex items-center p-4 bg-white shadow-sm rounded-lg">
-              <div class="p-3 bg-indigo-100 rounded-full">
+            <div class="flex items-center">
+              <div
+                class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center"
+              >
                 <svg
-                  class="h-6 w-6 text-indigo-700"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  style="fill: #4f46e5; transform: ; msfilter: "
                 >
                   <path
-                    d="M10 3a7 7 0 00-7 7 7 7 0 007 7 7 7 0 007-7 7 7 0 00-7-7zM7 10a1 1 0 112 0v2a1 1 0 11-2 0v-2zm4 0a1 1 0 112 0v2a1 1 0 11-2 0v-2z"
-                  />
+                    d="M12.25 2c-5.514 0-10 4.486-10 10s4.486 10 10 10 10-4.486 10-10-4.486-10-10-10zM18 13h-6.75V6h2v5H18v2z"
+                  ></path>
                 </svg>
               </div>
               <div class="ml-4">
-                <p class="text-sm font-semibold text-gray-500">Last Modified</p>
-                <p class="text-lg text-gray-700">
-                  <%= new Date(file.updatedAt).toLocaleDateString() %>
+                <p class="text-sm text-gray-500">Last Modified</p>
+                <p class="text-lg text-gray-700 font-medium">
+                 
+                  <%= new Date(file.updatedAt).toLocaleDateString('en-US', { day:
+                    'numeric', month: 'long', year: 'numeric' }) %>
                 </p>
-              </div>
-            </div>
-
-            <!-- Description -->
-            <div
-              class="col-span-1 md:col-span-2 lg:col-span-3 flex items-start p-4 bg-white shadow-sm rounded-lg"
-            >
-              <div class="p-3 bg-indigo-100 rounded-full">
-                <svg
-                  class="h-6 w-6 text-indigo-700"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M3 3a1 1 0 011-1h12a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V3zm2 2v10h10V5H5zm2 2h6v1H7V7zm0 2h6v1H7V9zm0 2h6v1H7v-1z"
-                  />
-                </svg>
-              </div>
-              <div class="ml-4">
-                <p class="text-sm font-semibold text-gray-500">Description</p>
-                <p class="text-lg text-gray-700"></p>
               </div>
             </div>
           </div>
@@ -114,6 +110,6 @@
       </div>
     </main>
 
-    <%- include('../layout/footer'); -%>
+    <%- include('../layout/footer') -%>
   </body>
 </html>
