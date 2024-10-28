@@ -22,12 +22,10 @@
   <td class="px-4 py-2">-</td>
   <td class="hidden sm:table-cell px-4 py-2">-</td>
   <td class="hidden sm:table-cell px-4 py-2">
-    <%= new Date(file.createdAt).toLocaleDateString('en-US', { day: 'numeric',
-    month: 'long', year: 'numeric' }) %>
+    <%= file.createdAgo %>
   </td>
   <td>
-    <%= new Date(file.updatedAt).toLocaleDateString('en-US', { day: 'numeric',
-    month: 'long', year: 'numeric' }) %>
+    <%= file.updatedAgo %>
   </td>
 
   <td class="px-4 py-2 relative">

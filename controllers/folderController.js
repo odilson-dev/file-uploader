@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const { formatDistanceToNow } = require("date-fns");
 
 const createFolder = asyncHandler(async (req, res) => {
   await prisma.folder.create({
@@ -50,7 +51,30 @@ const getFolders = asyncHandler(async (req, res) => {
       },
     });
 
-    res.render("folders/folders", { folders, files });
+    const formattedFolders = folders.map((folder) => ({
+      ...folder,
+      createdAgo: formatDistanceToNow(new Date(folder.createdAt), {
+        addSuffix: true,
+      }),
+      updatedAgo: formatDistanceToNow(new Date(folder.updatedAt), {
+        addSuffix: true,
+      }),
+    }));
+
+    const formattedFiles = files.map((file) => ({
+      ...file,
+      createdAgo: formatDistanceToNow(new Date(file.createdAt), {
+        addSuffix: true,
+      }),
+      updatedAgo: formatDistanceToNow(new Date(file.updatedAt), {
+        addSuffix: true,
+      }),
+    }));
+
+    res.render("folders/folders", {
+      folders: formattedFolders,
+      files: formattedFiles,
+    });
   } else {
     res.redirect("/");
   }
@@ -105,6 +129,26 @@ const showFolder = asyncHandler(async (req, res) => {
         parent: true,
       },
     });
+
+    folder.subfolders = folder.subfolders.map((folder) => ({
+      ...folder,
+      createdAgo: formatDistanceToNow(new Date(folder.createdAt), {
+        addSuffix: true,
+      }),
+      updatedAgo: formatDistanceToNow(new Date(folder.updatedAt), {
+        addSuffix: true,
+      }),
+    }));
+
+    folder.files = folder.files.map((file) => ({
+      ...file,
+      createdAgo: formatDistanceToNow(new Date(file.createdAt), {
+        addSuffix: true,
+      }),
+      updatedAgo: formatDistanceToNow(new Date(file.updatedAt), {
+        addSuffix: true,
+      }),
+    }));
 
     res.render("folders/show", { folder });
   } else {

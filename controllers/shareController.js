@@ -2,6 +2,8 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const crypto = require("crypto"); // For generating random share tokens
 
+const { formatDistanceToNow } = require("date-fns");
+
 const createShareItemLink = async (req, res) => {
   try {
     let { itemId, type, duration } = req.body; // `type` can be 'file' or 'folder'
@@ -85,7 +87,7 @@ const accessSharedItem = async (req, res) => {
         file: sharedItem.file,
       });
     } else if (sharedItem.type === "FOLDER") {
-      const folderContents = await prisma.folder.findUnique({
+      const folder = await prisma.folder.findUnique({
         where: { id: sharedItem.folderId },
         include: {
           subfolders: {
@@ -95,7 +97,27 @@ const accessSharedItem = async (req, res) => {
         },
       });
 
-      res.render("share/shared-folder", { folder: folderContents });
+      folder.subfolders = folder.subfolders.map((folder) => ({
+        ...folder,
+        createdAgo: formatDistanceToNow(new Date(folder.createdAt), {
+          addSuffix: true,
+        }),
+        updatedAgo: formatDistanceToNow(new Date(folder.updatedAt), {
+          addSuffix: true,
+        }),
+      }));
+
+      folder.files = folder.files.map((file) => ({
+        ...file,
+        createdAgo: formatDistanceToNow(new Date(file.createdAt), {
+          addSuffix: true,
+        }),
+        updatedAgo: formatDistanceToNow(new Date(file.updatedAt), {
+          addSuffix: true,
+        }),
+      }));
+
+      res.render("share/shared-folder", { folder });
     }
   } catch (error) {
     console.error("Error accessing shared item:", error);

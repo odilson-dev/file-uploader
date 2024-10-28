@@ -23,14 +23,8 @@
   <td class="hidden sm:table-cell px-4 py-2">
     <%= folder.subfolders.length %>
   </td>
-  <td class="hidden sm:table-cell px-4 py-2">
-    <%= new Date(folder.createdAt).toLocaleDateString('en-US', { day: 'numeric',
-    month: 'long', year: 'numeric' }) %>
-  </td>
-  <td>
-    <%= new Date(folder.updatedAt).toLocaleDateString('en-US', { day: 'numeric',
-    month: 'long', year: 'numeric' }) %>
-  </td>
+  <td class="hidden sm:table-cell px-4 py-2"><%= folder.createdAgo %></td>
+  <td><%= folder.updatedAgo %></td>
 
   <td class="px-4 py-2 relative">
     <div class="relative flex">
