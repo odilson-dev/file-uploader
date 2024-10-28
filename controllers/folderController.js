@@ -76,7 +76,7 @@ const getFolders = asyncHandler(async (req, res) => {
       files: formattedFiles,
     });
   } else {
-    res.redirect("/");
+    res.redirect("/log-in");
   }
 });
 

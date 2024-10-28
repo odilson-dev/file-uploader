@@ -21,7 +21,7 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/sign-up", (req, res) => {
-  res.render("index/sign-up");
+  res.render("index/sign-up", { errors: null });
 });
 router.get("/log-in", (req, res) => {
   res.render("index/log-in", { errors: null });
