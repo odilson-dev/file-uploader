@@ -42,6 +42,14 @@
           </h2>
           <p class="text-gray-600"><%= user.files.length %></p>
         </div>
+
+        <div class="bg-gray-100 p-4 rounded-lg">
+          <h2 class="text-lg font-semibold text-gray-700">Total Disk Used</h2>
+          <p class="text-gray-600">
+            <%= (user.files.reduce((accumulator, currentValue) => accumulator +
+            currentValue.size, 0,) / 1024).toFixed(2) %> KB
+          </p>
+        </div>
       </section>
 
       <!-- Action Buttons -->
