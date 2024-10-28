@@ -10,7 +10,7 @@ const handleUserSignUp = asyncHandler(async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.render("sign-up-form", { errors: errors.array() });
+    return res.render("index/sign-up", { errors: errors.array() });
   }
 
   const data = matchedData(req);
@@ -34,7 +34,7 @@ const handleUserLogIn = asyncHandler(async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.render("/", { errors: errors.array() });
+    return res.render("index/log-in", { errors: errors.array() });
   }
 
   next();
@@ -47,7 +47,7 @@ const handleUserAuthentication = asyncHandler(async (req, res, next) => {
     }
     if (!user) {
       // If authentication fails, render the homepage with the error message
-      return res.render("/", { errors: [{ msg: info.message }] });
+      return res.render("index/log-in", { errors: [{ msg: info.message }] });
     }
     req.logIn(user, (err) => {
       if (err) {

@@ -49,3 +49,12 @@ input[type="text"] {
   box-sizing: border-box;
   border: 1px solid black;
 }
+
+.error {
+  color: red;
+  background-color: rgba(255, 106, 106, 0.219);
+  padding: 3px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  font-weight: bold;
+}

@@ -10,6 +10,7 @@
             Login to FileUploader
           </h2>
           <form action="/log-in" method="POST" class="mt-6">
+            <% if(errors){ %> <%- include('errors', { errors }) %> <% }%>
             <!-- Username Field -->
             <div class="mb-4">
               <label for="username" class="block text-gray-700">Username</label>

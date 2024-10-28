@@ -24,7 +24,7 @@ router.get("/sign-up", (req, res) => {
   res.render("index/sign-up");
 });
 router.get("/log-in", (req, res) => {
-  res.render("index/log-in");
+  res.render("index/log-in", { errors: null });
 });
 
 router.post(

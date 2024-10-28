@@ -104,8 +104,16 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 text-[12px] sm:text-sm">
-              <%- include('./folder-rows', { folders }); -%> <%-
-              include('./file-rows', { files }); -%>
+              <% if(folders.length + files.length >= 1){%> <%-
+              include('./folder-rows', { folders }); -%> <%-
+              include('./file-rows', { files }); -%> <% } else {%>
+              <tr class="bg-gray-50">
+                <td colspan="6" class="text-center py-4 text-gray-500 text-sm">
+                  This folder is empty.
+                </td>
+              </tr>
+
+              <%} %>
             </tbody>
           </table>
         </div>
