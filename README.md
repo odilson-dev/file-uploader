@@ -41,7 +41,7 @@ The **file-uploader** app is a multi-page web application designed to provide us
 
 ### Prerequisites
 
-- **Node.js** and **npm** installed.
+- **Node.js** and **npm** or **pnpm** installed.
 - A **PostgreSQL** database.
 - Supabase account and bucket for file storage.
 
